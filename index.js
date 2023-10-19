@@ -7,6 +7,11 @@
  * Повертає: Масив користувачів.
  */
 function getUsersFromDatabase(array) {
+  return Array.from(array, (user) => ({
+    id: user.id,
+    firstName: user.name.toUpperCase(),
+    years: user.age,
+  }));
   // Використовуємо метод `Array.from` для створення масиву користувачів зі списку, елементи якого це об'єкти які міститять
   // id який дорівнює id користувача,firstName який дорівнює firstName користувача в верхньому регістрі та years який дорівнює age користувача
   // Повертаємо масив користувачів
@@ -37,6 +42,11 @@ console.log(getUsersFromDatabase(userRecords));
  * Повертає Видалений останній елемент або `undefined`, якщо масив порожній.
  */
 function removeLastElement(arr) {
+  if (arr.length === 0) {
+    return undefined;
+  }
+  arr.pop();
+  return arr;
   // Перевіряємо, чи масив не є порожнім, якщо порожній повертаємо  undefined
   // Використовуємо метод `pop` для видалення останнього елементу з масиву
   // Повертаємо оновлений масив
@@ -58,6 +68,7 @@ console.log(removeLastElement([1, 2, 3, 4, 5])); // Виведе [1, 2, 3, 4]
 function filterByCondition(arr, condition) {
   // Використовуємо метод `filter` для фільтрації масиву
   // Повертаємо відфільтрований масив
+  return arr.filter(condition);
 }
 
 // Приклад використання функції filterByCondition
@@ -75,10 +86,16 @@ console.log(filterByCondition([1, 2, 3, 4, 5], condition)); // Виведе [2, 
  */
 function checkArray(obj) {
   // Перевіряємо, чи є об'єкт не null і не undefined
-  // Використовуємо метод `Array.isArray` для перевірки, чи є об'єкт масивом
-  // Повертаємо результат перевірки
-  // Якщо об'єкт є null або undefined, виводимо повідомлення про помилку Помилка: Вхідний об'єкт є null або undefined.
-  //Повертаємо false
+  if (obj === null || obj === undefined) {
+    // Використовуємо метод `Array.isArray` для перевірки, чи є об'єкт масивом
+    console.log("Помилка: Вхідний об'єкт є null або undefined.");
+    return false;
+
+    // Повертаємо результат перевірки
+    // Якщо об'єкт є null або undefined, виводимо повідомлення про помилку Помилка: Вхідний об'єкт є null або undefined.
+    //Повертаємо false
+  }
+  return Array.isArray(obj);
 }
 
 // Приклад використання функції checkArray
@@ -93,6 +110,12 @@ console.log(checkArray([1, 2, 3, 4, 5])); // Виведе true
  * Повертає: Новий масив з переданих елементів.
  */
 function createArray(...elements) {
+  if (elements.length > 0) {
+    return Array.of(...elements);
+  } else {
+    console.error("Помилка: Не було передано жодного елементу.");
+    return [];
+  }
   // Перевіряємо, чи кількість переданих елементів більше нуля
   // Використовуємо метод `Array.of` для створення нового масиву з переданих елементів
   // Повертаємо створений масив
@@ -114,10 +137,19 @@ console.log(createArray(1, 2, 3, 4, 5)); // Виведе [1, 2, 3, 4, 5]
  */
 function getElementAtIndex(arr, index) {
   // Перевіряємо, чи масив не є порожнім
-  // Повертаємо undefined
+  if (arr.length === 0) {
+    // Повертаємо undefined
+    return undefined;
+  }
   // Перевіряємо, чи індекс знаходиться в межах довжини масиву
-  // Отримуємо елемент з масиву за заданим індексом
+  if (index >= 0 && index < arr.length) {
+    // Отримуємо елемент з масиву за заданим індексом
+    return arr[index];
+  }
   // Повертаємо отриманий елемент
+  else {
+    return undefined;
+  }
   // Якщо індекс виходить за межі масиву,повертаємо undefined
 }
 
@@ -136,10 +168,16 @@ console.log(getElementAtIndex([1, 2, 3, 4, 5], 2)); // Виведе 3
  */
 function combineAndReverseArrays(arr1, arr2) {
   // Перевіряємо, чи обидва аргументи є масивами
-  //  Якщо ні повертаємо пустий масив
+  if (!Array.isArray(arr1) || !Array.isArray(arr2)) {
+    //  Якщо ні повертаємо пустий масив
+    return [];
+  }
   // Об'єднуємо два масиви за допомогою методу `concat`
+  const combinedArray = arr1.concat(arr2);
   // Обертаємо отриманий об'єднаний масив за допомогою методу `reverse`
+  const reversedArray = combinedArray.reverse();
   // Повертаємо об'єднаний та обернутий масив
+  return reversedArray;
 }
 
 // Приклад використання функції combineAndReverseArrays
@@ -156,14 +194,27 @@ console.log(combineAndReverseArrays([1, 2, 3], [4, 5, 6])); //Виведе [ 6, 
  * Повертає: Масив індексів, де знайдено елемент, або пустий масив, якщо елемент не знайдено.
  */
 function findElementIndexes(arr, element) {
-  // Перевіряємо, чи аргумент є масивом
-  // якщо ні повертаємо пустий масив
+  if (!Array.isArray(arr)) {
+    // Перевіряємо, чи аргумент є масивом
+    // якщо ні повертаємо пустий масив
+    return [];
+  }
   // Знаходимо індекс першого знайденого елементу за допомогою методу `indexOf`
+  const firstIndex = arr.indexOf(element);
   // Знаходимо індекс останнього знайденого елементу за допомогою методу `lastIndexOf`
+  const lastIndex = arr.lastIndexOf(element);
   // Створюємо пустий масив індексів знайдених елементів
-  // Додаємо перший знайдений індекс, якщо елемент знайдено
+  const indexes = [];
+  if (firstIndex !== -1) {
+    // Додаємо перший знайдений індекс, якщо елемент знайдено
+    indexes.push(firstIndex);
+  }
   // Додаємо останній знайдений індекс, якщо він відрізняється від першого
+  if (lastIndex !== -1 && lastIndex !== firstIndex) {
+    indexes.push(lastIndex);
+  }
   // Повертаємо масив індексів
+  return indexes;
 }
 
 // Приклад використання функції findElementIndexes
@@ -183,10 +234,24 @@ console.log(findElementIndexes([1, 2, 3, 4, 5, 2], 2)); //Виведе [ 1, 5 ]
  */
 function copyAndSwapElements(arr, target, start, end) {
   // Перевіряємо, чи індекси належать межам масиву якщо ні виводимо рядок Неприпустимі індекси
-  // Копіюємо та переставляємо елементи за допомогою методу `copyWithin`
-  // Повертаємо модифікований масив
-}
+  if (
+    target < 0 ||
+    target >= arr.length ||
+    start < 0 ||
+    start >= arr.length ||
+    end < 0 ||
+    end > arr.length ||
+    target + (end - start) > arr.length
+  ) {
+    console.log("Неприпустимі індекси");
+    return arr;
+    // Копіюємо та переставляємо елементи за допомогою методу `copyWithin`
 
+    // Повертаємо модифікований масив
+  }
+  arr.copyWithin(target, start, end);
+  return arr;
+}
 // Приклад використання функції copyAndSwapElements
 
 console.log("Завдання:9 ==============================");
@@ -208,6 +273,16 @@ function sortByKey(arr, key) {
   // якщо a[key] > b[key] повертаємо 1
   // інакше повертаємо 0
   // Повертаємо відсортований масив об'єктів
+  arr.sort(function (a, b) {
+    if (a[key] < b[key]) {
+      return -1;
+    }
+    if (a[key] > b[key]) {
+      return 1;
+    }
+    return 0;
+  });
+  return arr;
 }
 
 console.log("Завдання: 10 ==============================");
@@ -235,9 +310,13 @@ console.log(sortByKey(unsortedArray, "age"));
  */
 function customEvery(arr, condition) {
   // Перевірка вхідних параметрів
-  // якщо arr не масив повертаємо false
+  if (!Array.isArray(arr) || typeof condition !== "function") {
+    // якщо arr не масив повертаємо false
+    return false;
+  }
   // якщо condition не function повертаємо false
   // Використання методу `every` для перевірки умови для кожного елементу масиву
+  return arr.every(condition);
   // Повернення результату перевірки
 }
 
@@ -258,10 +337,15 @@ console.log(customEvery(numbers, (num) => num % 2 === 0)); // Виведе true
  */
 function customFill(arr, value, start = 0, end = arr.length) {
   // Перевірка вхідних параметрів
-  // якщо arr не масив повертаємо false
+  if (!Array.isArray(arr) || start < 0 || end > arr.length || start >= end) {
+    // якщо arr не масив повертаємо false
+    return false;
+  }
   // якщо start та end не входять в діапазон від 0 до довжини масиву arr повертаємо false
   // Використання методу `fill` для заповнення вказаного діапазону елементів масиву заданим значенням
+  arr.fill(value, start, end);
   // Повернення заповненого масиву
+  return arr;
 }
 
 // Приклад використання функції customFill
@@ -277,9 +361,17 @@ console.log(customFill([1, 2, 3, 4, 5], 0, 1, 4)); // Виведе [ 1, 0, 0, 0,
  */
 function customShift(arr) {
   // перевірка на масив,якщо ні повертаємо undefined
+  if (!Array.isArray(arr)) {
+    return undefined;
+  }
   // перевірка чи масив не пустий,якщо так повертаємо undefined
+  if (arr.length === 0) {
+    return undefined;
+  }
   // видаляємо перший елемент та записуємо його в змінну shiftedElement
+  const shiftedElement = arr.shift();
   // повертаємо об'єкт { shiftedElement, arr }
+  return { shiftedElement, arr };
 }
 
 // Приклад використання функції customShift
@@ -298,11 +390,26 @@ console.log(customShift([1, 2, 3, 4, 5])); // Виведе { shiftedElement: 1, 
  */
 function customUnshift(arr, ...elements) {
   // Перевіряємо, чи вхідний параметр є масивом
+  if (!Array.isArray(arr)) {
+    return undefined;
+  }
   // Зберігаємо початкову довжину масиву в змінну initialLength
+  const initialLength = arr.length;
   // Додаємо елементи на початок масиву за допомогою методу `unshift` та циклу for, початкове значення лічильника на 1 менше ніж довжина масива,
+  for (let i = initialLength - 1; i >= 0; i--) {
+    arr[i + elements.length] = arr[i];
+  }
+
+  for (let i = 0; i < elements.length; i++) {
+    arr[i] = elements[i];
+  }
   // при кожній ітерації лічильник зменшуємо на 1 та продовжуємо поки лічильник більше, або дорівнює нулю
   // Отримуємо нову довжину масиву
+  const newLength = arr.length;
   // повертаємо об'єкт {initialLength, newLength, arr }
+  {
+    return { initialLength, newLength, arr };
+  }
 }
 
 console.log("Завдання: 14 ==============================");
@@ -321,8 +428,17 @@ console.log(customUnshift([2, 3, 4, 5], 1, 0)); // Виведе { initialLength:
  */
 function customSome(arr, condition) {
   // Перевіряємо, чи вхідний параметр є масивом якщо ні повертаємо false
+  if (!Array.isArray(arr)) {
+    return false;
+  }
   // Перевіряємо, чи condition є функцією  якщо ні повертаємо false
+  if (typeof condition !== "function") {
+    return false;
+  }
   // Використовуємо метод `some` для перевірки умови хоча б для одного елементу масиву
+  {
+    return arr.some(condition);
+  }
   // Повертаємо результат перевірки
 }
 console.log("Завдання: 15 ==============================");
@@ -342,8 +458,24 @@ console.log(customSome([1, 2, 3, 4, 5], isEven));
 */
 function customAt(arr, index) {
   // Перевіряємо, чи вхідний параметр є масивом якщо ні повертаємо undefined
+  if (!Array.isArray(arr)) {
+    return undefined;
+  }
   // Перевіряємо, чи індекс виходить за межі масиву якщо ні повертаємо undefined
+  if (index < 0 || index >= arr.length) {
+    return undefined;
+  }
   // Отримуємо елемент масиву за заданим індексом
+  const element = arr[index];
+  if (typeof element === "string") {
+    console.log("Елемент є рядком.");
+  } else if (typeof element === "number") {
+    console.log("Елемент є числом.");
+  } else if (typeof element === "object") {
+    console.log("Елемент є об`єктом.");
+  }
+
+  return element;
   // перевіремо якого типу елемент ми отримали,якщо рядок виведом в консоль -Елемент є рядком,числом - Елемент є числом, об`єктом -Елемент є обєктом
 }
 
@@ -366,9 +498,16 @@ console.log(customAt([1, 2, 3, 4, 5], 2));
   */
 function customIncludes(arr, element) {
   // Перевіряємо, чи вхідний параметр є масивом
+  if (!Array.isArray(arr)) {
+    return false;
+  }
   // Використовуємо метод includes для перевірки наявності елемента в масиві
+  const includesElement = arr.includes(element);
   // За допомогою методу filter перевіряємо скільки разів в масиві зустрічається елемент та виводимо число в консоль
+  const count = arr.filter((item) => item === element).length;
+  console.log(count);
   //Повертаємо результат
+  return includesElement;
 }
 
 console.log("Завдання: 17 ==============================");
